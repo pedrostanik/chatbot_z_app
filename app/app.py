@@ -1,6 +1,12 @@
 from flask import Flask, request
 from .send_message import SendMessage
 from .assistant_gpt import AssistantGPT
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+NUMBER_ALLOWED_UM = str(os.getenv('NUMBER_ALLOWED_UM'))
+NUMBER_ALLOWED_DOIS = str(os.getenv('NUMBER_ALLOWED_DOIS'))
 app = Flask(__name__)
 
 
@@ -21,7 +27,7 @@ def get_webhook():
             phone = payload['phone']
             print(f'message: {message}')
             print(f'phone: {phone}')
-            if phone == '5514988068820' or phone =='5514997424753':
+            if phone == NUMBER_ALLOWED_UM or phone == NUMBER_ALLOWED_DOIS:
                 send_message = SendMessage()
                 # answer = f'Mensagem {message} recebida!'
                 assistant_gpt = AssistantGPT()
