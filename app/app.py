@@ -1,5 +1,6 @@
 from flask import Flask, request
 from .send_message import SendMessage
+from .assistant_gpt import AssistantGPT
 app = Flask(__name__)
 
 
@@ -20,10 +21,14 @@ def get_webhook():
             phone = payload['phone']
             print(f'message: {message}')
             print(f'phone: {phone}')
-            send_message = SendMessage()
-            answer = f'Mensagem {message} recebida!'
-            send_message.send_message(phone, answer)
-        return "POST Message Received", 200  # Sucesso
+            if phone == '5514988068820' or phone =='5514997424753':
+                send_message = SendMessage()
+                # answer = f'Mensagem {message} recebida!'
+                assistant_gpt = AssistantGPT()
+                answer = assistant_gpt.execute(message)
+                send_message.send_message(phone, answer)
+                return "POST Message Received", 200  # Sucesso
+            return "POST Message Received, Not the Right user", 201  # Sucesso
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)
